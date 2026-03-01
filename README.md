@@ -1,3 +1,8 @@
+Hello, This is my compilled version of bkerler edl-tools that only requires installing libusb drivers using zadig or your prefered method,
+i mainly compiled it to be used for development of python based multifunctional qcom tool (it will be released in some time)...
+
+
+
 # Qualcomm Sahara / Firehose Attack Client / Diag Tools
 (c) B. Kerler 2018-2025
 Licensed under GPLv3 license.
@@ -72,77 +77,8 @@ User: user, Password:user (based on Ubuntu 22.04 LTS)
 [Live DVD V4 Mirror](https://drive.google.com/file/d/10OEw1d-Ul_96MuT3WxQ3iAHoPC4NhM_X/view?usp=sharing)
 
 ## Installation
+well you just download/clone it and you can either add it to path or run it from same directory edl.exe is located.
 
-#### Grab files and install
-```
-git clone https://github.com/bkerler/edl
-cd edl
-git submodule update --init --recursive
-pip3 install -r requirements.txt
-```
-
-### Linux (Debian/Ubuntu/Mint/etc): 
-```bash
-# Debian/Ubuntu/Mint/etc
-sudo apt install adb fastboot python3-dev python3-pip liblzma-dev git
-sudo apt purge modemmanager
-# Fedora/CentOS/etc
-sudo dnf install adb fastboot python3-devel python3-pip xz-devel git
-# Arch/Manjaro/etc
-sudo pacman -S android-tools python python-pip git xz
-sudo pacman -R modemmanager
-# Gentoo (run as root!)
-emerge -aq dev-util/android-tools dev-vcs/git dev-python/pip
-
-# For systemd distros
-sudo systemctl stop ModemManager
-sudo systemctl disable ModemManager
-# For OpenRC distros (run as root!)
-rc-update del modemmanager default boot sysinit
-rc-service modemmanager stop
-
-git clone https://github.com/bkerler/edl.git # do NOT use --recurse-submodules
-cd edl
-git submodule update --init --recursive
-
-# Autoinstall (run as root!)
-./autoinstall.sh
-
-# Manual install
-chmod +x ./install-linux-edl-drivers.sh
-bash ./install-linux-edl-drivers.sh
-python3 setup.py build
-sudo python3 setup.py install
-```
-
-If you have SELinux enabled, you may need to set it to permissive mode temporarily to prevent permission issues. SELinux is commonly used by RedHat-like distros (for example, RHEL, Fedora, and CentOS). You can set it to permissive run-time until next boot with `sudo setenforce 0`.
-
-### macOS:
-```bash
-brew install libusb git
-
-git clone https://github.com/bkerler/edl.git
-cd edl
-git submodule update --init --recursive
-python3 setup.py build
-sudo python3 setup.py install
-```
-
-### Windows:
-
-#### Method 1 - Automatic with PowerShell (Windows 10 and later)
-
-1.   Open PowerShell (Not CMD). To do that, right-click on the Windows start menu and select PowerShell or Terminal.
-2.   Copy and paste the code below and press enter
-```
-curl.exe -O https://raw.githubusercontent.com/bkerler/edl/master/install_edl_win10_win11.ps1; .\install_edl_win10_win11.ps1
-```
-
-#### Method 2 - Manual
-#### Install python + git
-- Install python 3.9 and git
-- If you install python from microsoft store, "python setup.py install" will fail, but that step isn't required.
-- WIN+R ```cmd```
 
 #### Get latest UsbDk 64-Bit
 - Install normal QC 9008 Serial Port driver (or use default Windows COM Port one, make sure no exclamation is seen)
@@ -163,23 +99,14 @@ edl --portname \\.\COM1
 
 ------------------------------------------------------------------------------------------------------------------------------------
 ## Get Loaders
-You should get these automatically if you do a ``` git submodule update --init --recursive ```
-or from [here](https://github.com/bkerler/Loaders)
+from [here](https://github.com/bkerler/Loaders)
 
 ## Convert own EDL loaders for automatic usage
 
-- Make a subdirectory "newstuff", copy your edl loaders to this subdirectory
-- ```fhloaderparse newstuff Loaders```
-
-- or sniff existing edl tools using Totalphase Beagle 480, set filter to ```filter({'inputs': False, 'usb3': False, 'chirps': False, 'dev': 26, 'usb2resets': False, 'sofs': False, 'ep': 1})```, export to binary file as "sniffeddata.bin" and then use ```beagle_to_loader sniffeddata.bin```
 
 
 ## Install EDL loaders
 
-- ```mkdir examples```
-- Copy all your loaders into the examples directory
-- ```fhloaderparse examples Loaders``` -> will autodetect and rename loader structure and copy them to the "Loaders" directory
-- Or rename Loaders manually as "msmid_pkhash[8 bytes].bin" and put them into the Loaders directory
 
 ------------------------------------------------------------------------------------------------------------------------------------
 
@@ -200,71 +127,71 @@ to get back the 0x9008 mode :
 
 ### Generic
 
-- ```edl -h``` -> to see help with all options
-- ```edl server --memory=ufs --tcpport=1340``` -> Run TCP/IP server on port 1340, see tcpclient.py for an example client
-- ```edl xml run.xml``` -> To send a xml file run.xml via firehose
-- ```edl reset``` -> To reboot the phone
-- ```edl rawxml <xmlstring>``` -> To send own xml string, example :
-   ```edl rawxml "<?xml version=\"1.0\" encoding=\"UTF-8\" ?><data><response value=\"ACK\" /></data>```
-- ```edl [anycommand] --debugmode``` -> enables Verbose. Do that only when REALLY needed as it will print out everything happening!
+- ```edl.exe -h``` -> to see help with all options
+- ```edl.exe server --memory=ufs --tcpport=1340``` -> Run TCP/IP server on port 1340, see tcpclient.py for an example client
+- ```edl.exe xml run.xml``` -> To send a xml file run.xml via firehose
+- ```edl.exe reset``` -> To reboot the phone
+- ```edl.exe rawxml <xmlstring>``` -> To send own xml string, example :
+- ```edl.exe rawxml "<?xml version=\"1.0\" encoding=\"UTF-8\" ?><data><response value=\"ACK\" /></data>```
+- ```edl.exe [anycommand] --debugmode``` -> enables Verbose. Do that only when REALLY needed as it will print out everything happening!
 
 ### For EMMC Flash
 
-- ```edl printgpt``` -> to print gpt on device with emmc
-- ```edl rf flash.bin``` -> to dump whole flash for device with emmc
-- ```edl rl dumps --skip=userdata --genxml``` -> to dump all partitions to directory dumps for device with emmc and skipping userdata partition, write rawprogram0.xml
-- ```edl rs 0 15 data.bin``` -> to dump 15 sectors from starting sector 0 to file data.bin for device with emmc
-- ```edl rs 0 15 data.bin --skipresponse``` -> to dump 15 sectors from starting sector 0 to file data.bin for device with emmc, ignores missing ACK from phones
-- ```edl r boot_a boot.img``` -> to dump the partition "boot_a" to the filename boot.img for device with emmc
-- ```edl r boot_a,boot_b boot_a.img,boot_b.img``` -> to dump multiple partitions to multiple filenames
-- ```edl footer footer.bin``` -> to dump the crypto footer for Androids with emmc flash
-- ```edl w boot_a boot.img``` -> to write boot.img to the "boot" partition on lun 0 on the device with emmc flash
-- ```edl w gpt gpt.img``` -> to write gpt partition table from gpt.img to the first sector on the device with emmc flash
-- ```edl wl dumps``` -> to write all files from "dumps" folder to according partitions to flash
-- ```edl wf dump.bin``` -> to write the rawimage dump.bin to flash
-- ```edl e misc``` -> to erase the partition misc on emmc flash
-- ```edl gpt . --genxml``` -> dump gpt_main0.bin/gpt_backup0.bin and write rawprogram0.xml to current directory (".")
+- ```edl.exe printgpt``` -> to print gpt on device with emmc
+- ```edl.exe rf flash.bin``` -> to dump whole flash for device with emmc
+- ```edl.exe rl dumps --skip=userdata --genxml``` -> to dump all partitions to directory dumps for device with emmc and skipping userdata partition, write rawprogram0.xml
+- ```edl.exe rs 0 15 data.bin``` -> to dump 15 sectors from starting sector 0 to file data.bin for device with emmc
+- ```edl.exe rs 0 15 data.bin --skipresponse``` -> to dump 15 sectors from starting sector 0 to file data.bin for device with emmc, ignores missing ACK from phones
+- ```edl.exe r boot_a boot.img``` -> to dump the partition "boot_a" to the filename boot.img for device with emmc
+- ```edl.exe r boot_a,boot_b boot_a.img,boot_b.img``` -> to dump multiple partitions to multiple filenames
+- ```edl.exe footer footer.bin``` -> to dump the crypto footer for Androids with emmc flash
+- ```edl.exe w boot_a boot.img``` -> to write boot.img to the "boot" partition on lun 0 on the device with emmc flash
+- ```edl.exe w gpt gpt.img``` -> to write gpt partition table from gpt.img to the first sector on the device with emmc flash
+- ```edl.exe wl dumps``` -> to write all files from "dumps" folder to according partitions to flash
+- ```edl.exe wf dump.bin``` -> to write the rawimage dump.bin to flash
+- ```edl.exe e misc``` -> to erase the partition misc on emmc flash
+- ```edl.exe gpt . --genxml``` -> dump gpt_main0.bin/gpt_backup0.bin and write rawprogram0.xml to current directory (".")
 
 
 ### For UFS Flash
 
-- ```edl printgpt --memory=ufs --lun=0``` -> to print gpt on lun 0
-- ```edl printgpt --memory=ufs``` -> to print gpt of all lun
-- ```edl rf lun0.bin --memory=ufs --lun=0``` -> to dump whole lun 0
-- ```edl rf flash.bin --memory=ufs``` -> to dump all luns as lun0_flash.bin, lun1_flash.bin, ...
-- ```edl rl dumps --memory=ufs --lun=0 --skip=userdata,vendor_a``` -> to dump all partitions from lun0 to directory dumps for device with ufs and skip userdata and vendor_a partition
-- ```edl rl dumps --memory=ufs --genxml``` -> to dump all partitions from all lun to directory dumps and write rawprogram[lun].xml
-- ```edl rs 0 15 data.bin --memory=ufs --lun=0``` -> to dump 15 sectors from starting sector 0 from lun 0 to file data.bin
-- ```edl r boot_a boot.img --memory=ufs --lun=4``` -> to dump the partition "boot_a" from lun 4 to the filename boot.img
-- ```edl r boot_a boot.img --memory=ufs``` -> to dump the partition "boot_a" to the filename boot.img using lun autodetection
-- ```edl r boot_a,boot_b boot_a.img,boot_b.img --memory=ufs``` -> to dump multiple partitions to multiple filenames
-- ```edl footer footer.bin --memory=ufs``` -> to dump the crypto footer
-- ```edl w boot boot.img --memory=ufs --lun=4``` -> to write boot.img to the "boot" partition on lun 4 on the device with ufs flash
-- ```edl w gpt gpt.img --memory=ufs --lun=4``` -> to write gpt partition table from gpt.img to the lun 4 on the device with ufs flash
-- ```edl wl dumps --memory=ufs --lun=0``` -> to write all files from "dumps" folder to according partitions to flash lun 0
-- ```edl wl dumps --memory=ufs``` -> to write all files from "dumps" folder to according partitions to flash and try to autodetect lun
-- ```edl wf dump.bin --memory=ufs --lun=0``` -> to write the rawimage dump.bin to flash lun 0
-- ```edl e misc --memory=ufs --lun=0``` -> to erase the partition misc on lun 0
-- ```edl gpt . --genxml --memory=ufs``` -> dump gpt_main[lun].bin/gpt_backup[lun].bin and write rawprogram[lun].xml to current directory (".")
+- ```edl.exe printgpt --memory=ufs --lun=0``` -> to print gpt on lun 0
+- ```edl.exe printgpt --memory=ufs``` -> to print gpt of all lun
+- ```edl.exe rf lun0.bin --memory=ufs --lun=0``` -> to dump whole lun 0
+- ```edl.exe rf flash.bin --memory=ufs``` -> to dump all luns as lun0_flash.bin, lun1_flash.bin, ...
+- ```edl.exe rl dumps --memory=ufs --lun=0 --skip=userdata,vendor_a``` -> to dump all partitions from lun0 to directory dumps for device with ufs and skip userdata and vendor_a partition
+- ```edl.exe rl dumps --memory=ufs --genxml``` -> to dump all partitions from all lun to directory dumps and write rawprogram[lun].xml
+- ```edl.exe rs 0 15 data.bin --memory=ufs --lun=0``` -> to dump 15 sectors from starting sector 0 from lun 0 to file data.bin
+- ```edl.exe r boot_a boot.img --memory=ufs --lun=4``` -> to dump the partition "boot_a" from lun 4 to the filename boot.img
+- ```edl.exe r boot_a boot.img --memory=ufs``` -> to dump the partition "boot_a" to the filename boot.img using lun autodetection
+- ```edl.exe r boot_a,boot_b boot_a.img,boot_b.img --memory=ufs``` -> to dump multiple partitions to multiple filenames
+- ```edl.exe footer footer.bin --memory=ufs``` -> to dump the crypto footer
+- ```edl.exe w boot boot.img --memory=ufs --lun=4``` -> to write boot.img to the "boot" partition on lun 4 on the device with ufs flash
+- ```edl.exe w gpt gpt.img --memory=ufs --lun=4``` -> to write gpt partition table from gpt.img to the lun 4 on the device with ufs flash
+- ```edl.exe wl dumps --memory=ufs --lun=0``` -> to write all files from "dumps" folder to according partitions to flash lun 0
+- ```edl.exe wl dumps --memory=ufs``` -> to write all files from "dumps" folder to according partitions to flash and try to autodetect lun
+- ```edl.exe wf dump.bin --memory=ufs --lun=0``` -> to write the rawimage dump.bin to flash lun 0
+- ```edl.exe e misc --memory=ufs --lun=0``` -> to erase the partition misc on lun 0
+- ```edl.exe gpt . --genxml --memory=ufs``` -> dump gpt_main[lun].bin/gpt_backup[lun].bin and write rawprogram[lun].xml to current directory (".")
 
 ### QFIL emulation (credits to LyuOnLine):
 
 - For flashing full image:
    ```
-   edl qfil rawprogram0.xml patch0.xml image_dir
+   edl.exe qfil rawprogram0.xml patch0.xml image_dir
    ```
 ------------------------------------------------------------------------------------------------------------------------------------
 
 ### For devices with peek/poke command
 
-- ```edl peek 0x200000 0x10 mem.bin``` -> To dump 0x10 bytes from offset 0x200000 to file mem.bin from memory
-- ```edl peekhex 0x200000 0x10``` -> To dump 0x10 bytes from offset 0x200000 as hex string from memory
-- ```edl peekqword 0x200000``` -> To display a qword (8-bytes) at offset 0x200000 from memory
-- ```edl pokeqword 0x200000 0x400000``` -> To write the q-word value 0x400000 to offset 0x200000 in memory
-- ```edl poke 0x200000 mem.bin``` -> To write the binary file mem.bin to offset 0x200000 in memory
-- ```edl secureboot``` -> To display secureboot fuses (only on EL3 loaders)
-- ```edl pbl pbl.bin``` -> To dump pbl (only on EL3 loaders)
-- ```edl qfp qfp.bin``` -> To dump qfprom fuses (only on EL3 loaders)
+- ```edl.exe peek 0x200000 0x10 mem.bin``` -> To dump 0x10 bytes from offset 0x200000 to file mem.bin from memory
+- ```edl.exe peekhex 0x200000 0x10``` -> To dump 0x10 bytes from offset 0x200000 as hex string from memory
+- ```edl.exe peekqword 0x200000``` -> To display a qword (8-bytes) at offset 0x200000 from memory
+- ```edl.exe pokeqword 0x200000 0x400000``` -> To write the q-word value 0x400000 to offset 0x200000 in memory
+- ```edl.exe poke 0x200000 mem.bin``` -> To write the binary file mem.bin to offset 0x200000 in memory
+- ```edl.exe secureboot``` -> To display secureboot fuses (only on EL3 loaders)
+- ```edl.exe pbl pbl.bin``` -> To dump pbl (only on EL3 loaders)
+- ```edl.exe qfp qfp.bin``` -> To dump qfprom fuses (only on EL3 loaders)
 
 ------------------------------------------------------------------------------------------------------------------------------------
 
